@@ -1,0 +1,11 @@
+tar xvf hadoop-2.6.0-cdh5.9.0.tar.gz -C /opt
+
+vi /etc/profile
+export HADOOP_HOME=/opt/hadoop-2.6.0-cdh5.9.0
+export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
+export PATH=$HADOOP_HOME/bin:$PATH
+
+
+
+unzip hdfs-clientconfig.zip -d /etc/hadoop
+mv /etc/hadoop/hadoop-conf /etc/hadoop

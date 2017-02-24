@@ -1,0 +1,73 @@
+設定安全性
+setenforce 0
+
+永久停止selinux安全性
+vi /etc/selinux/config
+SELINUX=disabled
+
+
+停止防火牆
+
+service iptables stop
+chkconfig iptables off
+
+設定SSH登入免詢問
+vi /etc/ssh/ssh_config
+StrictHostKeyChecking no
+
+service sshd restart 
+
+啟動ntp
+chkconfig ntpd on
+service ntpd start
+
+swappiness的設定
+echo 0 > /proc/sys/vm/swappiness
+
+vim /etc/sysctl.conf
+vm.swappiness = 0
+
+臨時關閉透明大頁面問題
+
+
+echo never > /sys/kernel/mm/transparent_hugepage/defrag
+echo never > /sys/kernel/mm/transparent_hugepage/enabled
+
+vi /etc/rc.local
+echo never > /sys/kernel/mm/transparent_hugepage/defrag
+echo never > /sys/kernel/mm/transparent_hugepage/enabled
+
+
+
+
+only master 
+設定hosts資訊
+vi /etc/hosts
+192.168.214.136 master
+192.168.214.137 slaver1
+192.168.214.138 slaver2
+
+
+產生 keygen
+ssh-keygen -t rsa -f ~/.ssh/id_rsa -P ""
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+ssh localhost
+
+複製 key 到其他主機
+ssh-copy-id -i ~/.ssh/id_rsa.pub root@slaver1
+ssh-copy-id -i ~/.ssh/id_rsa.pub root@slaver2
+
+複製檔案到其他主機(在Master做)
+scp -rp /etc/hosts root@slaver1:/etc/hosts
+
+(only master)
+
+wget http://archive.cloudera.com/cm5/installer/latest/cloudera-manager-installer.bin
+
+chmod u+x cloudera-manager-installer.bin
+
+./cloudera-manager-installer.bin(*虛擬機內操作較佳)
+(執行失敗,重開master機器)
+
+
+

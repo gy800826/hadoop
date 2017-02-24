@@ -1,0 +1,45 @@
+(root)
+wget https://repo.continuum.io/archive/Anaconda2-4.3.0-Linux-x86_64.sh
+
+bash Anaconda2-4.3.0-Linux-x86_64.sh -b
+
+
+vi ~/.bashrc
+export PATH=/home/ab104g2/anaconda2/bin:$PATH
+export ANACONDA_PATH=/home/ab104g2/anaconda2
+export PYSPARK_DRIVER_PYTHON=$ANACONDA_PATH/bin/ipython
+export PYSPARK_PYTHON=$ANACONDA_PATH/bin/python
+
+
+
+PYSPARK_DRIVER_PYTHON=ipython PYSPARK_DRIVER_PYTHON_OPTS="notebook" pyspark
+
+PYSPARK_DRIVER_PYTHON=ipython PYSPARK_DRIVER_PYTHON_OPTS="notebook" pyspark --master local[*]
+#存csv檔
+PYSPARK_DRIVER_PYTHON=ipython PYSPARK_DRIVER_PYTHON_OPTS="notebook" pyspark --packages com.databricks:spark-csv_2.10:1.2.0
+ 
+
+
+sudo -u hdfs hadoop fs -chmod 777 /user/spark
+sudo -u spark hadoop fs -chmod 777 /user/spark/applicationHistory
+
+
+textFile=sc.textFile("/user/root/spark101/wordcount/book/war_and_peace.txt")
+# textFile.count()
+# textFile.collect()
+stringRDD=textFile.flatMap(lambda line :line.split(" "))
+# stringRDD.collect()
+# stringRDD.map(lambda word:(word,1)).collect()
+stringRDD.map(lambda word:(word,1)).reduceByKey(lambda x,y:x+y).collect()
+
+
+(root) all
+numpy問題
+安裝pip
+curl -O https://bootstrap.pypa.io/get-pip.py
+python get-pip.py
+
+cd /usr/lib64/python2.7/site-packages
+pip install -U numpy-1.7.1-cp27-cp27mu-manylinux1_x86_64.whl
+
+
